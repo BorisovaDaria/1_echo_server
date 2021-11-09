@@ -13,18 +13,19 @@ def main():
 	conn, addr = sock.accept()
 	log(LogType.CLIENT_CONNECTED, addr)
 
-	msg = ''
-
 	while True:
 		data = conn.recv(1024)
 		if not data:
-			break
+			continue
 		log(LogType.DATA_RECEIVED)
-		msg += data.decode()
+		msg = data.decode()
 		conn.send(data)
+		print(msg)
 		log(LogType.DATA_SENT)
 
-	print(msg)
+		if msg == 'exit':
+			break
+
 
 	conn.close()
 	log(LogType.CLIENT_DISCONNECTED)
@@ -48,5 +49,4 @@ def log(log_type: LogType, ip: tuple = None):
 
 
 
-if __name__ == '__main__':
-	main()
+main()
