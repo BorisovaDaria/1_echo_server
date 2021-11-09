@@ -10,25 +10,27 @@ def main():
 	sock.listen(0)
 	log(LogType.START_LISTEN)
 
-	conn, addr = sock.accept()
-	log(LogType.CLIENT_CONNECTED, addr)
 
 	while True:
-		data = conn.recv(1024)
-		if not data:
-			continue
-		log(LogType.DATA_RECEIVED)
-		msg = data.decode()
-		conn.send(data)
-		print(msg)
-		log(LogType.DATA_SENT)
+		conn, addr = sock.accept()
+		log(LogType.CLIENT_CONNECTED, addr)
 
-		if msg == 'exit':
-			break
+		while True:
+			data = conn.recv(1024)
+			if not data:
+				continue
+			log(LogType.DATA_RECEIVED)
+			msg = data.decode()
+			conn.send(data)
+			print(msg)
+			log(LogType.DATA_SENT)
+
+			if msg == 'exit':
+				break
 
 
-	conn.close()
-	log(LogType.CLIENT_DISCONNECTED)
+		conn.close()
+		log(LogType.CLIENT_DISCONNECTED, addr)
 
 
 class LogType(Enum):
